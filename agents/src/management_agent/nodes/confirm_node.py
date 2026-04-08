@@ -21,5 +21,6 @@ class ManagementAgentConfirmNode:
         # 3. Trả về state mới
         return {
             "user_confirmation": is_confirmed,
-            "messages": [HumanMessage(content=str(confirmation_input))]
+            "messages": [HumanMessage(content=str(confirmation_input))],
+            "extracted_content": state["extracted_content"]
         }
