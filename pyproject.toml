@@ -1,0 +1,13 @@
+[project]
+name = "zenit-agent"
+version = "0.1.0"
+requires-python = ">=3.12"
+
+[tool.uv.workspace]
+members = [
+    "shared",   # Include the "shared" package in the workspace
+    "agents",
+]
+
+[tool.uv.sources]   # implement dependency sources
+shared = { workspace = true }   # Package "shared" is part of the workspace
