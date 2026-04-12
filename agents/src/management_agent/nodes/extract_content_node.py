@@ -8,8 +8,16 @@ from management_agent.states.main_state import ManagementAgentMainState
 class ManagementAgentExtractContentNode:
     
     @staticmethod
-    def extract_content_from_text(state: ManagementAgentMainState):
-        llm_model = LLMUtil.get_google_genai_model()
+    async def extract_content_from_text(state: ManagementAgentMainState):
+        if state["user_confirmation"] is True:
+            return {
+                "messages": state["messages"],
+                "extracted_content": state["extracted_content"]
+            }
+        
+        print(f"Current state messages: {state['messages']}")
+            
+        llm_model = LLMUtil.get_google_genai_chat_model()
         messages = state["messages"]
         
         if not any(isinstance(m, SystemMessage) for m in messages):
@@ -17,15 +25,13 @@ class ManagementAgentExtractContentNode:
                 SystemMessage(content=ManagementAgentExtractContentPrompt.PROMPT)
             ] + messages
         
-        response = llm_model.invoke(messages)
+        response = await llm_model.ainvoke(messages)
         
-        # If response is already a message object, use it directly
+        # response đã là AIMessage — dùng trực tiếp, không cần lấy .content[-1]
         if isinstance(response, str):
             response = AIMessage(content=response)
         
         return {
-            "messages": state["messages"] + [response.content[-1]],
-            "extracted_content": response.content[-1]
+            "messages": state["messages"] + [response],  # ✅ truyền AIMessage object
+            "extracted_content": response.content[-1]["text"]
         }
-    
-    
