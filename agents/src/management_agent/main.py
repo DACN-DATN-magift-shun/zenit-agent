@@ -21,19 +21,27 @@ async def lifespan(app: FastAPI):
     app.state.agent = await get_agent()
     print("Done initializing agent")
     
-    app.state.qdrant_client = QdrantClient(url=os.getenv(EnvConstants.QDRANT_CLIENT_URL))
+    qdrant_client = QdrantClient(url=os.getenv(EnvConstants.QDRANT_CLIENT_URL))
     print("Done initializing Qdrant client")
     
     for collection in ManagementAgentQdrantConstants.QDRANT_COLLECTIONS:
-        app.state.qdrant_client.create_collection(
-            collection_name=collection,
-            vectors_config=VectorParams(
-                size=QdrantConstants.QDRANT_VECTOR_SIZE,
-                distance=Distance.COSINE
+        collections = qdrant_client.get_collections().collections
+        existing_names = [c.name for c in collections]
+        if collection not in existing_names:
+            qdrant_client.create_collection(
+                collection_name=collection,
+                vectors_config=VectorParams(
+                    size=QdrantConstants.QDRANT_VECTOR_SIZE,
+                    distance=Distance.COSINE
             )
         )
-    
+            
+        collection_info = qdrant_client.get_collection(collection)
+        vector_size = collection_info.config.params.vectors.size
+        print(f"Collection '{collection}' created with vector size: {vector_size}")
     yield
+    
+    qdrant_client.close()
     
 
 app = FastAPI(title="Management Agent API", lifespan=lifespan)

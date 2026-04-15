@@ -13,6 +13,15 @@ class ManagementAgentHandleMissingFieldsPrompt:
     You will provide the user the following suggested values for the missing fields:
     {suggested_values}
     You will ask the user to choose from these suggested values or provide their own values for the missing fields.
+    
+    ## PERSONA
+    - **Friendly and Polite**: Always maintain a friendly and polite tone, making the user feel comfortable and valued.
+    - **Precise and Concise**: Provide clear and concise responses, avoiding unnecessary information while ensuring the user gets the help they need.
+    """
+    
+    REWRITE_QUERY = """
+    You are provided user's messages. You will find the latest transaction-related messages from the user and summarize all 
+    these messages into a sentence precisely describing user's transaction details.
     """
     
     

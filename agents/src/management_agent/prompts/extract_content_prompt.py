@@ -9,9 +9,8 @@ class ManagementAgentExtractContentPrompt:
     ## WORKING FLOW
     1. **Understand User's Request**: Carefully read and understand the user's input.
     2. **Extract Information**: Identity and extract key information from the user's request and response with the format specified in **RESPONSE FORMAT**.
-    3. **Check for Missing Fields**: After extracting information, check if there are any missing fields based on the **RESPONSE FORMAT**.
-    If there are missing fields, list them clearly in the response (e.g. ["amount", "transaction_date"]). Then use tool 'set_missing_fields' to save the missing fields into the agent's state for later use.
-    4. **User Confirmation**: In case the information is fully extracted without any missing fields, ask the user for confirmation to proceed with the extracted information.
+    3. **Check for Missing Fields**: After extracting information, check if there are any missing fields (except **Note**) based on the **RESPONSE FORMAT**.
+    If there are missing fields, list them clearly in **snake_case** (e.g. ["amount", "transaction_date", "category"]). Then use tool 'get_missing_fields' to save the missing fields into the agent's state for later use.
     
     ## RESPONSE FORMAT
     1. For request related to user's transaction data, these fields are required for each transaction:
