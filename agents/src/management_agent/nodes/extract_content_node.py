@@ -1,4 +1,5 @@
 from dotenv import load_dotenv
+from management_agent.nodes.helpers.extract_content_helper import ManagementAgentExtractContentHelper
 from management_agent.prompts.extract_content_prompt import ManagementAgentExtractContentPrompt
 from management_agent.tools.transaction import ManagementAgentTransactionTool
 from src.utils.llm_util import LLMUtil
@@ -21,9 +22,8 @@ class ManagementAgentExtractContentNode:
         ] + messages
         
         response = await llm_model.ainvoke(messages)
-        
-        if isinstance(response, str):
-            response = AIMessage(content=response)
+        text_response = ManagementAgentExtractContentHelper.extract_text_from_response(response)
+        print(f"Text response from LLM: {text_response}\n===============================")
 
         tool_results = []
         missing_fields = []
@@ -31,15 +31,15 @@ class ManagementAgentExtractContentNode:
         for tool_call in response.tool_calls:
             if tool_call["name"] == "get_missing_fields":
                 result = await ManagementAgentTransactionTool.get_missing_fields.ainvoke(tool_call["args"])
-                missing_fields = result
+                missing_fields = result  
             else:
                 result = None
             tool_results.append(result)
         print(f"Tool call results: {tool_results}\n===============================")
 
         return {
-            "messages": [response],
-            "extracted_content": response.content,
+            "messages": [text_response] if text_response else [],
+            "extracted_content": text_response if text_response else "",
             "missing_fields": missing_fields,
             "query": ""
         }

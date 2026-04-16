@@ -12,4 +12,4 @@ class ManagementAgentMessageRequest(BaseModel):
 class ManagementAgentMessageResponse(BaseModel):
     response: Any
     # is_interrupted: bool = False
-    messages: Any
+    # messages: Any

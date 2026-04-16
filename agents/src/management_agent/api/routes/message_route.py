@@ -3,6 +3,7 @@ from fastapi import APIRouter, Request
 from langgraph.types import Command
 from langchain_core.messages import HumanMessage
 from management_agent.api.requests.message_request import ManagementAgentMessageRequest, ManagementAgentMessageResponse
+from management_agent.nodes.helpers.extract_content_helper import ManagementAgentExtractContentHelper
 
 management_message_router = APIRouter()
 
@@ -43,7 +44,7 @@ class ManagementAgentMessageHandler:
             serialized_messages = [
                 {
                     "role": msg.__class__.__name__,
-                    "content": msg.content if isinstance(msg.content, str) else str(msg.content),
+                    "content": ManagementAgentExtractContentHelper.extract_text_from_response(msg.content),
                     "id": getattr(msg, "id", None),
                 }
                 for msg in updated_state.values.get("messages", [])
@@ -58,12 +59,12 @@ class ManagementAgentMessageHandler:
             if interrupt_value:
                 return ManagementAgentMessageResponse(
                     response=interrupt_value,
-                    messages=serialized_messages,
+                    # messages=serialized_messages,
                 )
 
             return ManagementAgentMessageResponse(
                 response=serialized_messages[-1]["content"] if serialized_messages else None,
-                messages=serialized_messages,
+                # messages=serialized_messages,
             )
 
         except Exception as e:

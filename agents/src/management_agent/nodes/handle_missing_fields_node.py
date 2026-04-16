@@ -28,8 +28,7 @@ class ManagementAgentHandleMissingFieldsNode:
         
         # Handle required fields that must be provided by user
         if any(f in missing_fields for f in ["transaction_date", "amount", "title"]):
-            interrupt_message = f"""Tôi nhận thấy bạn đang thiếu các trường {', '.join([f for f in missing_fields if f in ['transaction_date', 'amount', 'title']])}. 
-                                    Bạn hãy cung cấp giá trị cho các trường này giúp tôi nhé!"""
+            interrupt_message = f"""Tôi nhận thấy bạn đang thiếu các trường {', '.join([f for f in missing_fields if f in ['transaction_date', 'amount', 'title']])}. Bạn hãy cung cấp giá trị cho các trường này giúp tôi nhé!"""
 
             user_input = interrupt(interrupt_message)
             print(f"Interrupt message: {interrupt_message}\n================================")
@@ -62,7 +61,8 @@ class ManagementAgentHandleMissingFieldsNode:
             )
             
             if search_results:
-                interrupt_message = f"Tôi nhận thấy bạn đang thiếu các trường {', '.join([f for f in missing_fields if f in ['category', 'wallet']])}. Dựa trên những gì bạn đã nói, tôi gợi ý các giá trị sau cho các trường này: {search_results}. Bạn hãy lựa chọn các giá trị này hoặc cung cấp giá trị cho các trường này giúp tôi nhé!"
+                extracted_suggestions = ManagementAgentExtractContentHelper.extract_qdrant_search_results(search_results.points)
+                interrupt_message = f"Tôi nhận thấy bạn đang thiếu các trường {', '.join([f for f in missing_fields if f in ['category', 'wallet']])}. Dựa trên những gì bạn đã nói, tôi gợi ý các giá trị sau cho các trường này: {extracted_suggestions}. Bạn hãy lựa chọn các giá trị này hoặc cung cấp giá trị cho các trường này giúp tôi nhé!"
             else:
                 interrupt_message = f"Tôi nhận thấy bạn đang thiếu các trường {', '.join([f for f in missing_fields if f in ['category', 'wallet']])}. Bạn hãy cung cấp giá trị cho các trường này giúp tôi nhé!"
                 

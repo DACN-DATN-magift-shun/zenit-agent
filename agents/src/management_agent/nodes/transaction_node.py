@@ -56,6 +56,7 @@ class ManagementAgentTransactionNode:
         ]
         
         all_new_messages = []
+        text_response = []
 
         # ✅ Loop đến khi LLM không còn gọi tool
         while True:
@@ -63,8 +64,9 @@ class ManagementAgentTransactionNode:
             all_new_messages.append(response)
             
             if not response.tool_calls:
+                text_response.append(ManagementAgentExtractContentHelper.extract_text_from_response(response))
                 break
-            
+                
             tool_results = await tool_node.ainvoke(
                 {"messages": [response]},
                 config
@@ -73,4 +75,4 @@ class ManagementAgentTransactionNode:
             all_new_messages.extend(tool_messages)
             messages.extend([response, *tool_messages])
 
-        return {"messages": all_new_messages}
+        return {"messages": all_new_messages, "response": "\n".join(text_response)}
