@@ -11,5 +11,6 @@ class ManagementAgentMessageRequest(BaseModel):
 
 class ManagementAgentMessageResponse(BaseModel):
     response: Any
+    suggestions: Any
     # is_interrupted: bool = False
     # messages: Any

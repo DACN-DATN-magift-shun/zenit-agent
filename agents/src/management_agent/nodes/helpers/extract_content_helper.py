@@ -24,8 +24,13 @@ class ManagementAgentExtractContentHelper:
 
     @staticmethod
     def extract_qdrant_search_results(search_result):
-        return {
-            (point.payload['category'], point.payload['wallet'])
-            for point in search_result
-            if 'category' in point.payload and 'wallet' in point.payload
-        }
+        """Trả về list of dicts thay vì set of tuples"""
+        seen = {}
+        for point in search_result:
+            if 'category' in point.payload and 'wallet' in point.payload:
+                category = point.payload.get('category')
+                wallet = point.payload.get('wallet')
+                key = (category, wallet)
+                if key not in seen:
+                    seen[key] = {"category": category, "wallet": wallet}
+        return list(seen.values())

@@ -59,16 +59,19 @@ class ManagementAgentMessageHandler:
             if interrupt_value:
                 return ManagementAgentMessageResponse(
                     response=interrupt_value,
+                    suggestions=updated_state.values.get("suggestions", []),
                     # messages=serialized_messages,
                 )
 
             return ManagementAgentMessageResponse(
                 response=serialized_messages[-1]["content"] if serialized_messages else None,
+                suggestions=updated_state.values.get("suggestions", []),
                 # messages=serialized_messages,
             )
 
         except Exception as e:
             return ManagementAgentMessageResponse(
                 response=f"Error: {str(e)}",
-                messages=[],
+                suggestions=[],
+                # messages=serialized_messages,
             )

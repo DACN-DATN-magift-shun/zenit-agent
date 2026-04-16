@@ -8,5 +8,6 @@ class ManagementAgentMainState(BaseState):
     query: Optional[str]
     extracted_content: Optional[Any]
     user_confirmation: Optional[Any]
+    suggestions: Optional[List[Any]]
     
     
