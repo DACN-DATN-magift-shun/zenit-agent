@@ -1,0 +1,2 @@
+class LLMConstants:
+    GOOGLE_MODEL_TEMPERATURE = 0.2
