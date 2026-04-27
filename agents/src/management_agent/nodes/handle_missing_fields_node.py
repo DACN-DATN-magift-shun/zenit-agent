@@ -20,21 +20,22 @@ class ManagementAgentHandleMissingFieldsNode:
     @staticmethod
     async def handle_missing_fields(state: ManagementAgentMainState, config: RunnableConfig):
         missing_fields = state['missing_fields']
-        print(f"Missing fields identified: {missing_fields}\n===============================")
+        print(f"Missing fields value in handle_missing_fields node: {missing_fields}\n===============================")
         
         llm_model = LLMUtil.get_google_genai_chat_model()
         rewrite_query = None
         search_results = None
+        extracted_suggestions = []
         
-        # Handle required fields that must be provided by user
         if any(f in missing_fields for f in ["transaction_date", "amount", "title"]):
-            interrupt_message = f"""Tôi nhận thấy bạn đang thiếu các trường **{', '.join([f for f in missing_fields if f in ['transaction_date', 'amount', 'title']])}**. Bạn hãy cung cấp giá trị cho các trường này giúp tôi nhé!"""
-
-            user_input = interrupt(interrupt_message)
-            print(f"Interrupt message: {interrupt_message}\n================================")
+            print("Python running in this block - transaction_date, amount, title\n===============================")
+            return {
+                "suggestions": extracted_suggestions
+            }
             
         # Handle optional fields that can be suggested or requested
         if any(f in missing_fields for f in ["category", "wallet"]):
+            print("Python running in this block - category, wallet\n===============================")
             qdrant_client = QdrantClient(url=os.getenv(EnvConstants.QDRANT_CLIENT_URL))
             qdrant = ManagementAgentQdrant(qdrant_client)
             
@@ -59,18 +60,18 @@ class ManagementAgentHandleMissingFieldsNode:
                     account_id=config["configurable"]["account_id"]
                 )
             )
+            print(f"Qdrant search results: {search_results}\n================================")
             
             if search_results:
                 extracted_suggestions = ManagementAgentExtractContentHelper.extract_qdrant_search_results(search_results.points)
-                interrupt_message = f"Tôi nhận thấy bạn đang thiếu các trường **{', '.join([f for f in missing_fields if f in ['category', 'wallet']])}**. Dựa trên những gì bạn đã nói, tôi gợi ý các giá trị sau cho các trường này. Bạn hãy lựa chọn các giá trị này hoặc cung cấp giá trị cho các trường này giúp tôi nhé!"
+            #     # state["suggestions"] = extracted_suggestions
+            #     interrupt_message = f"Tôi nhận thấy bạn đang thiếu các trường **{', '.join([f for f in missing_fields if f in ['category', 'wallet']])}**. Dựa trên những gì bạn đã nói, tôi gợi ý các giá trị sau cho các trường này. Bạn hãy lựa chọn các giá trị này hoặc cung cấp giá trị cho các trường này giúp tôi nhé!"
             else:
-                interrupt_message = f"Tôi nhận thấy bạn đang thiếu các trường **{', '.join([f for f in missing_fields if f in ['category', 'wallet']])}**. Bạn hãy cung cấp giá trị cho các trường này giúp tôi nhé!"
+            #     interrupt_message = f"Tôi nhận thấy bạn đang thiếu các trường **{', '.join([f for f in missing_fields if f in ['category', 'wallet']])}**. Bạn hãy cung cấp giá trị cho các trường này giúp tôi nhé!"
+                extracted_suggestions = []
                 
-        user_input = interrupt(interrupt_message)
-        print(f"Interrupt message: {interrupt_message}\n================================")
-        print(f"Suggestions: {extracted_suggestions}\n================================")
-        return {
-            "messages": [HumanMessage(content=user_input)],
-            "query": rewrite_query,
-            "suggestions": extracted_suggestions if search_results else []
-        }
+            print(f"Suggestions: {extracted_suggestions}\n================================")
+            return {
+                "query": rewrite_query,
+                "suggestions": extracted_suggestions
+            }

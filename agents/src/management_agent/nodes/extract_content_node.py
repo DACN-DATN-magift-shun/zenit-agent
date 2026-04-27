@@ -36,7 +36,7 @@ class ManagementAgentExtractContentNode:
                 result = None
             tool_results.append(result)
         print(f"Tool call results: {tool_results}\n===============================")
-
+        print(f"Missing fields identified in extract_content_from_text: {missing_fields}\n===============================")
         return {
             "messages": [text_response] if text_response else [],
             "extracted_content": text_response if text_response else "",

@@ -17,8 +17,9 @@ class ManagementAgentMainGraph(BaseGraph):
         
         # Add nodes
         graph.add_node("extract_content", ManagementAgentExtractContentNode.extract_content_from_text)
-        graph.add_node("user_confirmation", ManagementAgentUserConfirmationNode.get)
-        
+        graph.add_node("clean_suggestions", ManagementAgentUserConfirmationNode.clean_missing_fields_suggestions)
+        graph.add_node("user_confirmation", ManagementAgentUserConfirmationNode.get_transaction_confirmation)
+        graph.add_node("user_confirmation_missing_fields", ManagementAgentUserConfirmationNode.get_missing_fields_confirmation)
         graph.add_node("handle_missing_fields", ManagementAgentHandleMissingFieldsNode.handle_missing_fields)
         graph.add_node("create_transaction", ManagementAgentTransactionNode.create)
         
@@ -29,10 +30,13 @@ class ManagementAgentMainGraph(BaseGraph):
             self._is_missing_fields,
             {
                 True: "handle_missing_fields",
-                False: "user_confirmation"
+                False: "clean_suggestions"
             }
         )
-        graph.add_edge("handle_missing_fields", "extract_content")
+        graph.add_edge("handle_missing_fields", "user_confirmation_missing_fields")
+        graph.add_edge("user_confirmation_missing_fields", "extract_content")
+        graph.add_edge("clean_suggestions", "user_confirmation")
+        
         graph.add_conditional_edges(
             "user_confirmation",
             self._is_user_confirmation,
@@ -51,6 +55,7 @@ class ManagementAgentMainGraph(BaseGraph):
     
     def _is_missing_fields(self, state: ManagementAgentMainState):
         missing_fields = state["missing_fields"]
+        print(f"Current missing fields in _is_missing_fields: {missing_fields}\n===============================")
         
         return len(missing_fields) > 0
     
