@@ -8,7 +8,8 @@ class ManagementAgentUserConfirmationNode:
     @staticmethod
     async def clean_missing_fields_suggestions(state: ManagementAgentMainState):
         return {
-            "suggestions": []
+            "suggestions": [],
+            "display_accept_button": True
         }
         
     @staticmethod
@@ -17,6 +18,7 @@ class ManagementAgentUserConfirmationNode:
         
         return {
             "user_confirmation": True if user_input.lower() == "yes" else False,
+            "display_accept_button": False
         }
     
     @staticmethod

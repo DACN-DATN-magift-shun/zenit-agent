@@ -60,12 +60,14 @@ class ManagementAgentMessageHandler:
                 return ManagementAgentMessageResponse(
                     response=interrupt_value,
                     suggestions=updated_state.values.get("suggestions", []),
+                    display_accept_button=updated_state.values.get("display_accept_button", False),
                     # messages=serialized_messages,
                 )
 
             return ManagementAgentMessageResponse(
                 response=serialized_messages[-1]["content"] if serialized_messages else None,
                 suggestions=updated_state.values.get("suggestions", []),
+                display_accept_button=updated_state.values.get("display_accept_button", False),
                 # messages=serialized_messages,
             )
 
@@ -73,5 +75,6 @@ class ManagementAgentMessageHandler:
             return ManagementAgentMessageResponse(
                 response=f"Error: {str(e)}",
                 suggestions=[],
+                display_accept_button=False,
                 # messages=serialized_messages,
             )

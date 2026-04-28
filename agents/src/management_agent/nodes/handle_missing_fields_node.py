@@ -73,5 +73,5 @@ class ManagementAgentHandleMissingFieldsNode:
             print(f"Suggestions: {extracted_suggestions}\n================================")
             return {
                 "query": rewrite_query,
-                "suggestions": extracted_suggestions
+                "suggestions": extracted_suggestions,
             }

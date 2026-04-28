@@ -7,6 +7,7 @@ class ManagementAgentMainState(BaseState):
     missing_fields: Optional[List[str]]
     query: Optional[str]
     extracted_content: Optional[Any]
+    display_accept_button: Optional[bool]
     user_confirmation: Optional[Any]
     suggestions: Optional[List[Any]]
     

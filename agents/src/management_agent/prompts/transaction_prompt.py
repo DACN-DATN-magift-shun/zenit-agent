@@ -24,12 +24,16 @@ class ManagementAgentTransactionPrompt:
     **get_all_wallets**: Get all wallets for the specified account. Use this tool to find the wallet_id based on the wallet name extracted from the content.
     **create**: Create a transaction with the specified details.
     
-    # IMPORTANT: 
+    # IMPORTANT PRINCIPLES: 
     1. The names of category and wallet extracted from the content may not exactly match the names in the system. In this case,
     you will choose the closest match based on the similarity between the extracted name and the names in the system. 
+    2. **Always follow user's language**: Respond in the user's language (eg. If user input is in Vietnamese, respond in Vietnamese), ensuring better understanding and communication.
     """
     
     CREATE_QUERY = """
     You are provided user's messages. You will summarize all these messages into a sentence precisely describing user's transaction details. 
+    
+    # IMPORTANT PRINCIPLES
+    - **Always follow user's language**: Respond in the user's language (eg. If user input is in Vietnamese, respond in Vietnamese), ensuring better understanding and communication.
     """
     
