@@ -27,7 +27,7 @@ COPY ["./.gitignore", "./"]
 COPY ["agents/.gitignore", "agents/"]
 COPY ["agents/AGENTS.md", "agents/"]
 COPY ["shared/.python-version", "shared/"]
-COPY ["agents/.env", "agents/"]
+# COPY ["agents/.env", "agents/"]
 
 FROM python:3.12-slim
 WORKDIR /src
