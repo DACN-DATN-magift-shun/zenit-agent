@@ -27,6 +27,7 @@ class LLMUtil:
         model = GoogleGenerativeAIEmbeddings(
             model=os.getenv(EnvConstants.GOOGLE_EMBEDDING_MODEL_NAME),
             api_key=next(_key_cycle),
+            base_url="https://generativelanguage.googleapis.com",
         )
         
         return model
