@@ -21,7 +21,7 @@ async def lifespan(app: FastAPI):
     app.state.agent = await get_agent()
     print("Done initializing agent")
     
-    qdrant_client = QdrantClient(url=os.getenv(EnvConstants.QDRANT_CLIENT_URL))
+    qdrant_client = QdrantClient(url=os.getenv(EnvConstants.QDRANT_CLIENT_URL), timeout=30)
     print("Done initializing Qdrant client")
     
     for collection in ManagementAgentQdrantConstants.QDRANT_COLLECTIONS:
