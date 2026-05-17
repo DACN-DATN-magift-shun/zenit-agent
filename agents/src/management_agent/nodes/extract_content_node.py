@@ -42,5 +42,6 @@ class ManagementAgentExtractContentNode:
             "extracted_content": text_response if text_response else "",
             "missing_fields": missing_fields,
             "query": "",
-            "display_accept_button": False
+            "display_accept_button": False,
+            "suggestions": []
         }

@@ -21,18 +21,5 @@ class ManagementAgentExtractContentPrompt:
         - **Transaction date**: Date of the transaction.
         - **Category**: Category of the transaction (e.g., Food, Transportation, Entertainment, etc.).
         - **Wallet**: The wallet used for the transaction (e.g., Credit Card, Debit Card, Cash, etc.).
-        - **Note**: Any additional information about the transaction.
-    2. For request related to user's financial goals, these fields are required for each goal:
-        - **Goal name**: Name of the financial goal.
-        - **Target amount**: The target amount for the goal.
-        - **Current amount**: The current amount saved towards the goal.
-        - **Deadline**: The deadline for achieving the goal.
-        - **Note**: Any additional information about the goal.
-    3. For request related to user's loan, these fields are required for each loan:
-        - **Loan name**: Name of the loan.
-        - **Type**: Type of the loan (Lent or Debt).
-        - **Amount**: Amount of the loan.
-        - **Date**: Date of the loan.
-        - **Due date**: Due date for the loan repayment.
-        - **Note**: Any additional information about the loan.
+        - **Note** (Optional, not listed into missing fields): Any additional information about the transaction.
     """

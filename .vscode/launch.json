@@ -1,0 +1,21 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python Debugger: FastAPI",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "uvicorn",
+            "args": [
+                "management_agent.main:app",
+                "--reload",
+                "--host",
+                "127.0.0.1",
+                "--port",
+                "8765"
+            ],
+            "jinja": true,
+            "cwd": "${workspaceFolder}/agents"
+        }
+    ]
+}

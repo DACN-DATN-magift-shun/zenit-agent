@@ -18,6 +18,9 @@ load_dotenv()
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    current_model_name = os.getenv(EnvConstants.GOOGLE_CHAT_MODEL_NAME)
+    print(f"--- Current chat model: '{current_model_name}' ---")
+    
     app.state.agent = await get_agent()
     print("Done initializing agent")
     
